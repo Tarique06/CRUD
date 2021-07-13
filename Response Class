@@ -1,0 +1,27 @@
+//This is create API Response
+@Data
+@Component
+public class ProfileCreateResponse {
+	private String status;
+	private String message;
+	private Integer addressId;
+}
+
+
+
+//This is Read API Response
+@Data
+@Component
+public class ReadProfileResponse {
+  private String status;
+	private String message;
+	sqlTablename fetchList;
+}
+
+//This is Delete API Response
+@Data
+@Component
+public class DeleteProfileResponse {
+	private String status;
+	private String message;
+}
