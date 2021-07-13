@@ -20,3 +20,4 @@ public class TableName implements Serializable {
 
 	@Column(name = "ADDRESS_TYPE")
 	private String addressType;
+}
