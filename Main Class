@@ -1,0 +1,50 @@
+@RestController
+public class ProfileResource {
+	private static final Logger logger = LoggerFactory.getLogger(ProfileResource.class);
+	
+	@Autowired
+	ProfileService service;
+  
+  
+    //This is Create API
+          @RequestMapping(path = "/createProfile", method = RequestMethod.POST)
+          public ProfileCreateResponse createProfile(@RequestHeader HttpHeaders headers,
+              @Validated @RequestBody ProfileCreateRequest request, BindingResult result) {
+            logger.info("In createProfile");
+            if (result.hasErrors()) {
+              throw new InvalidDataException(result);
+            } else {
+              ProfileCreateResponse response = service.createProfile(request);
+              return response;
+            }
+          }
+
+      
+    //This is Read API
+          @RequestMapping(path = "/readProfile", method = RequestMethod.POST)
+          public ReadProfileResponse readProfile(@RequestHeader HttpHeaders headers,
+              @Validated @RequestBody ReadProfileRequest request, BindingResult result) {
+            logger.info("In readProfile");
+            if (result.hasErrors()) {
+              throw new InvalidDataException(result);
+            } else {
+              ReadProfileResponse response = service.readProfile(headers, request);
+              return response;
+            }
+          }
+        
+        
+    //This is Delete API
+          @RequestMapping(path = "/deleteProfile", method= RequestMethod.POST)
+          public DeleteProfileResponse deleteProfile (@RequestHeader HttpHeaders headers,
+              @Validated @RequestBody DeleteProfileRequest request, BindingResult result) {
+            logger.info(" In deleteProfile");
+            if (result.hasErrors()) {
+              throw new InvalidDataException(result);
+            } else {
+              DeleteProfileResponse response= service.deleteProfile(request);
+              request = null;
+              return response;
+            }
+          }
+  }
