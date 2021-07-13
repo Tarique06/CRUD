@@ -1,0 +1,92 @@
+public class ProfileServiceImpl implements ProfileService{
+private static final Logger logger = LoggerFactory.getLogger(ProfileServiceImpl.class);
+
+	@Autowired
+	ProfileRepository repository;
+
+
+//This is CREATE API Service Implementation
+@Override
+	@Transactional
+	public ProfileCreateResponse createProfile(ProfileCreateRequest request) {
+		ProfileCreateResponse response = new ProfileCreateResponse();
+		TableName element = request.getElement();
+		try {
+			Integer profileId = repository.getProfileId(element.getAddressId());
+			element.setProfileType("ANY");
+			element.setProfileId(profileId);
+			String dealExistenceSameProfileId = "";
+			String dealExistenceCount = "";
+			dealExistenceCount = repository.getDealExistenceCount(element.getAddressId());
+			if (StringUtils.isBlank(dealExistenceCount)) {
+				dealExistenceCount = "0";
+			}
+			dealExistenceCount = dealExistenceCount.trim();
+
+			if (!dealExistenceCount.equalsIgnoreCase("0")) {
+				dealExistenceSameProfileId = repository.getDealExistenceSameBpId(element.getProfileId());
+				if (StringUtils.isBlank(dealExistenceSameProfileId)) {
+					dealExistenceSameProfileId = "0";
+				}
+				dealExistenceSameProfileId = dealExistenceSameProfileId.trim();
+
+				if (dealExistenceSameProfileId.equalsIgnoreCase("0")) {
+					repository.getDealExistenceDelete(element.getAddressId(), profileId);
+				}
+			}
+			repository.save(element);
+			response.setStatus("1");
+			response.setMessage("Operation completed successfully");
+			response.setAddressId(element.getAddressId());
+		} catch (Exception ex) {
+			response.setStatus("0");
+			response.setMessage("Some Unknown error occured" + ex.getMessage());
+			ex.printStackTrace();
+		}
+		return response;
+	}
+
+
+
+//This is READ API Service Implementation
+@Override
+	@Transactional
+	public ReadProfileResponse readProfile(HttpHeaders headers, ReadProfileRequest request) {
+		ReadProfileResponse readProfileResponse = new ReadProfileResponse();
+		Integer addressId = request.getAddressId();
+		TableName profileDetails = repository.findByAddressId(addressId);
+
+		if (profileDetails != null) {
+			readProfileResponse.setStatus("1");
+			readProfileResponse.setMessage("Success");
+			readProfileResponse.setFetchDealList(profileDetails);
+		} else {
+			readProfileResponse.setStatus("1");
+			readProfileResponse.setMessage("No Data Found.");
+		}
+		request = null;
+
+		return readProfileResponse;
+	}
+
+
+
+//This is DELETE API Service Implementation
+@Override
+	@Transactional
+	public DeleteProfileResponse deleteProfile(DeleteProfileRequest request) {
+		DeleteProfileResponse deleteProfileResponse = new DeleteProfileResponse();
+		try {
+			Integer addressId = request.getAddressId();
+			repository.deleteBy(addressId);
+			DeleteProfileResponse.setStatus("1");
+			DeleteProfileResponse.setMessage("Data Deleted Successfully");
+		} catch (Exception e) {
+			DeleteProfileResponse.setStatus("0");
+			DeleteProfileResponse.setMessage("Error");
+		}
+		request = null;
+		return DeleteProfileResponse;
+	}
+
+}
