@@ -1,0 +1,10 @@
+@Repository
+public interface ProfileRepository extends JpaRepository<TableName, Integer> {
+
+@Query(value = "write here native query for creating the table list", nativeQuery = true)
+	public String getDealExistenceCount(@Param("addressId") Integer addressId);
+  
+@Modifying
+@Query(value="write here native query for Deleting the table list",nativeQuery = true)
+	public int deleteBy(@Param("addressID") Integer addressID);
+  }
