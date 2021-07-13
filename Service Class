@@ -1,0 +1,7 @@
+//This is Service class of APIs
+
+public interface ProfileResource {
+public ProfileCreateResponse createProfile(ProfileCreateRequest request);
+public ReadProfileResponse readProfile(ReadProfileRequest request);
+public DeleteProfileResponse deleteProfile(DeleteProfileRequest request);
+}
