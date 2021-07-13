@@ -1,0 +1,23 @@
+//This is Create API Request
+
+@Data
+public class ProfileCreateRequest  {
+	private TableName element;
+}
+
+
+//This is Read API Request 
+@Data
+public class ReadProfileRequest {
+	@NotNull(message = "Address Id cannot be null")
+	private Integer addressId;
+}
+
+
+//This is Delete API Request
+@Data
+public class DeleteProfileRequest  {
+	@NotNull(message = "Address Id cannot be null")
+	private Integer addressId;
+}
+
